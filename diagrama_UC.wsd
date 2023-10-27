@@ -1,0 +1,87 @@
+@startuml
+
+!theme toy
+
+left to right direction
+
+actor Usuário as u
+actor "Administrador de Sistema" as adm
+actor Médico as med
+actor Paciente as pac
+actor Secretário as sec
+
+rectangle "Usuários" as usuários {
+
+  u -- (Fazer Login)
+  u -- (Logout)
+  u -- (Trocar Senha)
+  u -- (Visualizar Informações Pessoais)
+  u -- (Acessar Histórico)
+  u -- (Visualizar Prescrições)
+  u -- (Acessar Exames)
+  u -- (Atendimento de Suporte)
+}
+
+  u <|-- adm 
+  u <|-- med 
+  u <|-- pac 
+  u <|-- sec 
+
+adm -- (Gerenciar Dados da Clínica)
+adm -- (Gerenciar Medicamentos)
+adm -- (Gerenciar Categorias)
+adm -- (Gerenciar Modelos de Consultas)
+adm -- (Gerenciar Funcionários)
+adm -- (Gerenciar Horários)
+
+
+
+(Gerenciar Modelos de Consultas) .> (Visualizar Categorias ) : include
+
+(Gerenciar Medicamentos) <. (Consultar Estoque) : extend
+
+rectangle "Realação de Funcionarios" as funcionarios {
+
+(Gerenciar Funcionários) <. (Gerenciar Médicos) : extend
+(Gerenciar Funcionários) <. (Gerenciar Secretário) : extend
+(Gerenciar Funcionários) <. (Gerenciar Administradores) : extend
+
+
+}
+
+med -- (Realizar Consulta)
+med -- (Visualizar Prontuário do Paciente)
+
+
+
+rectangle "Realação de Pacientes" as pacientes {
+
+med -- (Gerenciar Pacientes)
+
+(Gerenciar Pacientes) .> (Listar consultas vinculadas) : include
+(Gerenciar Pacientes) <. (Cadastrar Pacientes) : extend
+(Gerenciar Pacientes) <. (Excluir Pacientes) : extend
+
+sec -- (Gerenciar Pacientes)
+sec -- (Visualizar Pacientes Cadastrados)
+
+}
+
+pac -- (Visualizar Itens da Consulta)
+pac -- (Visualizar Recomendações)
+pac -- (Consultar Datas das Consultas)
+
+
+rectangle "Agenda" as agenda {
+med -- (Acompanhar Agenda)
+
+sec -- (Gerenciar Agenda)
+
+
+(Gerenciar Agenda) .> (Consultar Datas das Consultas) : include
+(Gerenciar Agenda) <. (Desmarcar consultas) : extend
+(Gerenciar Agenda) <. (Marcar Consultas) : extend
+
+}
+
+@enduml
