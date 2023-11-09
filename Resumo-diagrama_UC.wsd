@@ -1,0 +1,43 @@
+@startuml
+left to right direction
+
+actor Usuário as u
+actor "Administrador de Sistema" as adm
+actor Médico as med
+actor Paciente as pac
+actor Secretário as sec
+
+rectangle "Usuários" as usuários {
+  u -- (Gerenciar login, Gerenciar perfil, Acessar Histórico, Visualizar Prescrições, Acessar Exames, Atendimento de Suporte)
+}
+
+u <|-- adm 
+u <|-- med 
+u <|-- pac 
+u <|-- sec 
+
+adm -- (Gerenciar Dados da Clínica, Medicamentos, Categorias, Modelos de Consultas, Funcionários, Horários)
+
+(Gerenciar Modelos de Consultas) .> (Visualizar Categorias) : include
+(Gerenciar Medicamentos) <. (Consultar Estoque) : extend
+
+rectangle "Funcionários" as funcionarios {
+  (Gerenciar Funcionários) <. (Gerenciar Médicos, Secretário, Administradores) : extend
+}
+
+med -- (Realizar Consulta, Visualizar Prontuário do Paciente)
+pac -- (Visualizar Itens da Consulta, Visualizar Recomendações, Consultar Datas das Consultas)
+
+rectangle "Pacientes" as pacientes {
+  med -- (Gerenciar Pacientes)
+  (Gerenciar Pacientes) .> (Listar consultas vinculadas) : include
+  (Gerenciar Pacientes) <. (Cadastrar, Excluir Pacientes) : extend
+  sec -- (Gerenciar Pacientes, Visualizar Pacientes Cadastrados)
+}
+
+
+med -- (Acompanhar Agenda)
+sec -- (Gerenciar Agenda)
+(Gerenciar Agenda) .> (Consultar Datas das Consultas) : include
+(Gerenciar Agenda) <. (Desmarcar, Marcar Consultas) : extend
+@enduml
